@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Fashion Studio</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Fashion Studio</h1>
+                <p>Admin Panel</p>
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="btn-login">Sign In</button>
+                <p class="login-hint">Default: admin / admin123</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="dashboard" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Fashion Studio</h2>
+                <span class="admin-badge">Admin</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="portfolio">
+                    <span class="icon">📸</span>
+                    Portfolio Images
+                </a>
+                <a href="#" class="nav-item" data-section="featured">
+                    <span class="icon">⭐</span>
+                    Featured Work
+                </a>
+                <a href="#" class="nav-item" data-section="hero">
+                    <span class="icon">🎨</span>
+                    Hero Section
+                </a>
+                <a href="#" class="nav-item" data-section="settings">
+                    <span class="icon">⚙️</span>
+                    Settings
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn-logout">
+                    <span class="icon">🚪</span>
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1 id="section-title">Portfolio Images</h1>
+                <div class="header-actions">
+                    <button class="btn-primary" id="upload-btn">
+                        <span>➕</span> Upload Images
+                    </button>
+                </div>
+            </header>
+
+            <!-- Portfolio Section -->
+            <section id="portfolio-section" class="content-section">
+                <div class="upload-zone" id="upload-zone">
+                    <div class="upload-icon">📤</div>
+                    <h3>Drag & Drop Images Here</h3>
+                    <p>or click to browse</p>
+                    <input type="file" id="file-input" multiple accept="image/*" hidden>
+                </div>
+
+                <div class="images-grid" id="images-grid">
+                    <!-- Images will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Featured Section -->
+            <section id="featured-section" class="content-section" style="display: none;">
+                <div class="upload-zone" id="featured-upload-zone">
+                    <div class="upload-icon">📤</div>
+                    <h3>Upload Featured Images</h3>
+                    <p>Maximum 3 featured images</p>
+                    <input type="file" id="featured-file-input" multiple accept="image/*" hidden>
+                </div>
+
+                <div class="images-grid" id="featured-images-grid">
+                    <!-- Featured images will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Hero Section -->
+            <section id="hero-section" class="content-section" style="display: none;">
+                <div class="settings-card">
+                    <h3>Hero Background Image</h3>
+                    <div class="hero-preview" id="hero-preview">
+                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&h=1080&fit=crop" alt="Hero Background">
+                    </div>
+                    <button class="btn-secondary" id="change-hero-btn">Change Background</button>
+                    <input type="file" id="hero-file-input" accept="image/*" hidden>
+                </div>
+
+                <div class="settings-card">
+                    <h3>Hero Text Content</h3>
+                    <div class="form-group">
+                        <label>Subtitle</label>
+                        <input type="text" id="hero-subtitle" value="Real Adventures From Real Couples">
+                    </div>
+                    <div class="form-group">
+                        <label>Main Title</label>
+                        <input type="text" id="hero-title" value="WEDDING & ELOPEMENT PORTFOLIO">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" id="hero-description" value="Based in Sedona, Arizona. Traveling anywhere in the U.S & Beyond">
+                    </div>
+                    <button class="btn-primary" id="save-hero-text">Save Changes</button>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="content-section" style="display: none;">
+                <div class="settings-card">
+                    <h3>Site Settings</h3>
+                    <div class="form-group">
+                        <label>Studio Name</label>
+                        <input type="text" id="studio-name" value="Fashion Studio">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Email</label>
+                        <input type="email" id="contact-email" value="hello@fashionstudio.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="contact-phone" value="+1 (555) 123-4567">
+                    </div>
+                    <button class="btn-primary" id="save-settings">Save Settings</button>
+                </div>
+
+                <div class="settings-card">
+                    <h3>Change Password</h3>
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" id="current-password">
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="confirm-password">
+                    </div>
+                    <button class="btn-secondary" id="change-password">Change Password</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Image Preview Modal -->
+    <div id="image-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <img id="modal-image" src="" alt="Preview">
+            <div class="modal-actions">
+                <button class="btn-danger" id="delete-image">Delete Image</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>
