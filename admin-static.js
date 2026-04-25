@@ -55,14 +55,29 @@ document.querySelectorAll('.nav-item').forEach(item => {
         document.getElementById(`${section}-section`).style.display = 'block';
         
         const titles = {
-            'portfolio': 'Portfolio Images',
+            'dashboard': 'Dashboard',
+            'portfolio': 'Gallery Management',
             'featured': 'Featured Work',
             'hero': 'Hero Section',
-            'settings': 'Settings'
+            'inquiries': 'Inquiries Management'
         };
         document.getElementById('section-title').textContent = titles[section];
+        
+        // Update stats on dashboard view
+        if (section === 'dashboard') {
+            updateDashboardStats();
+        }
     });
 });
+
+// Update dashboard stats
+function updateDashboardStats() {
+    const images = getImages();
+    const featured = getFeaturedImages();
+    document.getElementById('total-photos').textContent = images.length;
+    document.getElementById('featured-count').textContent = featured.length;
+    document.getElementById('inquiries-count').textContent = '0';
+}
 
 // Image Storage (localStorage)
 function getImages() {

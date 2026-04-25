@@ -41,17 +41,25 @@
                 <span class="admin-badge">Admin</span>
             </div>
             <nav class="sidebar-nav">
-                <a href="#" class="nav-item active" data-section="portfolio">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <span class="icon">�</span>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item" data-section="portfolio">
                     <span class="icon">📸</span>
-                    Portfolio Images
+                    Gallery
                 </a>
                 <a href="#" class="nav-item" data-section="featured">
                     <span class="icon">⭐</span>
-                    Featured Work
+                    Featured
                 </a>
                 <a href="#" class="nav-item" data-section="hero">
                     <span class="icon">🎨</span>
                     Hero Section
+                </a>
+                <a href="#" class="nav-item" data-section="inquiries">
+                    <span class="icon">📧</span>
+                    Inquiries
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -73,12 +81,74 @@
                 </div>
             </header>
 
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section">
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📸</div>
+                        <div class="stat-content">
+                            <h4>Total Photos</h4>
+                            <p class="stat-number" id="total-photos">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">⭐</div>
+                        <div class="stat-content">
+                            <h4>Featured</h4>
+                            <p class="stat-number" id="featured-count">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">📧</div>
+                        <div class="stat-content">
+                            <h4>Inquiries</h4>
+                            <p class="stat-number" id="inquiries-count">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">✓</div>
+                        <div class="stat-content">
+                            <h4>Status</h4>
+                            <p class="stat-number">Active</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-welcome">
+                    <h2>Welcome to Admin Dashboard</h2>
+                    <p>Manage your photography business from here</p>
+                </div>
+            </section>
+
             <!-- Portfolio Section -->
-            <section id="portfolio-section" class="content-section">
+            <section id="portfolio-section" class="content-section" style="display: none;">
+                <div class="upload-card">
+                    <div class="upload-header">
+                        <span class="upload-icon-large">☁️</span>
+                        <h3>Upload New Photos</h3>
+                    </div>
+                    <div class="upload-form">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="photo-category">
+                                <option value="">Select Category</option>
+                                <option value="wedding">Wedding</option>
+                                <option value="portrait">Portrait</option>
+                                <option value="editorial">Editorial</option>
+                                <option value="commercial">Commercial</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Photo Description</label>
+                            <input type="text" id="photo-description" placeholder="e.g., Beautiful wedding ceremony">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="upload-zone" id="upload-zone">
                     <div class="upload-icon">📤</div>
                     <h3>Drag & Drop Images Here</h3>
-                    <p>or click to browse</p>
+                    <p>or click to browse (Multiple files supported)</p>
                     <input type="file" id="file-input" multiple accept="image/*" hidden>
                 </div>
 
