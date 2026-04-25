@@ -1,71 +1,37 @@
-// Admin Panel JavaScript
+// Static Admin Panel - No Backend Required
+// All data stored in localStorage
+
+// Hardcoded credentials
+const ADMIN_EMAIL = 'admin@fashionstudio.com';
+const ADMIN_PASSWORD = 'FashionStudio@2026';
 
 // Check if user is logged in
 function checkAuth() {
-    const token = localStorage.getItem('adminToken');
-    if (token) {
-        // Verify token with backend
-        fetch('/api/verify', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                showDashboard();
-            } else {
-                localStorage.removeItem('adminToken');
-            }
-        })
-        .catch(() => {
-            localStorage.removeItem('adminToken');
-        });
+    const isLoggedIn = localStorage.getItem('adminLoggedIn');
+    if (isLoggedIn === 'true') {
+        showDashboard();
     }
 }
 
 // Login Form Handler
-document.getElementById('login-form').addEventListener('submit', async (e) => {
+document.getElementById('login-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    try {
-        const response = await fetch('/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            localStorage.setItem('adminToken', data.token);
-            localStorage.setItem('adminEmail', data.user.email);
-            showDashboard();
-        } else {
-            alert(data.error || 'Invalid credentials!');
-        }
-    } catch (error) {
-        alert('Login failed. Please try again.');
-        console.error('Login error:', error);
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+        localStorage.setItem('adminLoggedIn', 'true');
+        showDashboard();
+    } else {
+        alert('Invalid credentials!');
     }
 });
 
 // Logout Handler
-document.getElementById('logout-btn').addEventListener('click', async () => {
+document.getElementById('logout-btn').addEventListener('click', () => {
     if (confirm('Are you sure you want to logout?')) {
-        try {
-            await fetch('/api/logout', { method: 'POST' });
-            localStorage.removeItem('adminToken');
-            localStorage.removeItem('adminEmail');
-            location.reload();
-        } catch (error) {
-            console.error('Logout error:', error);
-            location.reload();
-        }
+        localStorage.removeItem('adminLoggedIn');
+        location.reload();
     }
 });
 
@@ -73,6 +39,7 @@ function showDashboard() {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('admin-dashboard').style.display = 'flex';
     loadImages();
+    loadFeaturedImages();
 }
 
 // Navigation
@@ -80,16 +47,13 @@ document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', (e) => {
         e.preventDefault();
         
-        // Update active state
         document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
         item.classList.add('active');
         
-        // Show corresponding section
         const section = item.dataset.section;
         document.querySelectorAll('.content-section').forEach(sec => sec.style.display = 'none');
         document.getElementById(`${section}-section`).style.display = 'block';
         
-        // Update title
         const titles = {
             'portfolio': 'Portfolio Images',
             'featured': 'Featured Work',
@@ -100,7 +64,7 @@ document.querySelectorAll('.nav-item').forEach(item => {
     });
 });
 
-// Image Storage (using localStorage for demo - use backend in production)
+// Image Storage (localStorage)
 function getImages() {
     const images = localStorage.getItem('portfolioImages');
     return images ? JSON.parse(images) : [];
@@ -303,27 +267,6 @@ document.getElementById('delete-image').addEventListener('click', () => {
 });
 
 // Hero Section
-const heroFileInput = document.getElementById('hero-file-input');
-const changeHeroBtn = document.getElementById('change-hero-btn');
-
-changeHeroBtn.addEventListener('click', () => {
-    heroFileInput.click();
-});
-
-heroFileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            document.querySelector('#hero-preview img').src = e.target.result;
-            localStorage.setItem('heroImage', e.target.result);
-            alert('Hero image updated! Refresh the main website to see changes.');
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-// Save Hero Text
 document.getElementById('save-hero-text').addEventListener('click', () => {
     const heroData = {
         subtitle: document.getElementById('hero-subtitle').value,
@@ -331,7 +274,7 @@ document.getElementById('save-hero-text').addEventListener('click', () => {
         description: document.getElementById('hero-description').value
     };
     localStorage.setItem('heroText', JSON.stringify(heroData));
-    alert('Hero text updated! Refresh the main website to see changes.');
+    alert('Hero text updated!');
 });
 
 // Save Settings
@@ -343,33 +286,6 @@ document.getElementById('save-settings').addEventListener('click', () => {
     };
     localStorage.setItem('siteSettings', JSON.stringify(settings));
     alert('Settings saved successfully!');
-});
-
-// Change Password
-document.getElementById('change-password').addEventListener('click', () => {
-    const current = document.getElementById('current-password').value;
-    const newPass = document.getElementById('new-password').value;
-    const confirm = document.getElementById('confirm-password').value;
-    
-    if (current !== DEFAULT_PASSWORD) {
-        alert('Current password is incorrect!');
-        return;
-    }
-    
-    if (newPass !== confirm) {
-        alert('New passwords do not match!');
-        return;
-    }
-    
-    if (newPass.length < 6) {
-        alert('Password must be at least 6 characters!');
-        return;
-    }
-    
-    alert('Password changed successfully! (Note: This is a demo - password will reset on page reload)');
-    document.getElementById('current-password').value = '';
-    document.getElementById('new-password').value = '';
-    document.getElementById('confirm-password').value = '';
 });
 
 // Upload Button in Header

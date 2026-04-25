@@ -1,17 +1,40 @@
+require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const session = require('express-session');
+const compression = require('compression');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+// Enable compression for all responses
+app.use(compression());
 
 // Middleware
 app.use(cors());
-app.use(express.json());
-app.use(express.static('.'));
-app.use('/uploads', express.static('uploads'));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Cache static files for 1 year in production
+const cacheTime = process.env.NODE_ENV === 'production' ? 31536000 : 0;
+app.use(express.static('.', { maxAge: cacheTime }));
+app.use('/uploads', express.static('uploads', { maxAge: cacheTime }));
+
+// Session middleware
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+}));
 
 // Create uploads directory if it doesn't exist
 if (!fs.existsSync('./uploads')) {
@@ -45,6 +68,23 @@ const upload = multer({
     }
 });
 
+// Authentication Middleware
+const authenticateToken = (req, res, next) => {
+    const token = req.headers['authorization']?.split(' ')[1] || req.session.token;
+    
+    if (!token) {
+        return res.status(401).json({ error: 'Access denied. No token provided.' });
+    }
+    
+    try {
+        const verified = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = verified;
+        next();
+    } catch (err) {
+        res.status(403).json({ error: 'Invalid or expired token' });
+    }
+};
+
 // Routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
@@ -54,8 +94,60 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// Upload single image
-app.post('/api/upload', upload.single('image'), (req, res) => {
+// Login endpoint
+app.post('/api/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        
+        // Get credentials from environment variables
+        const adminEmail = process.env.ADMIN_EMAIL;
+        const adminPassword = process.env.ADMIN_PASSWORD;
+        
+        // Simple validation - check if credentials match
+        if (email !== adminEmail || password !== adminPassword) {
+            return res.status(401).json({ 
+                success: false, 
+                error: 'Invalid email or password' 
+            });
+        }
+        
+        // Generate JWT token
+        const token = jwt.sign(
+            { email: email, role: 'admin' },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+        
+        // Store token in session
+        req.session.token = token;
+        
+        res.json({
+            success: true,
+            token: token,
+            user: { email: email, role: 'admin' }
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Logout endpoint
+app.post('/api/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ success: false, error: 'Logout failed' });
+        }
+        res.json({ success: true, message: 'Logged out successfully' });
+    });
+});
+
+// Verify token endpoint
+app.get('/api/verify', authenticateToken, (req, res) => {
+    res.json({ success: true, user: req.user });
+});
+
+// Upload single image (protected route)
+app.post('/api/upload', authenticateToken, upload.single('image'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' });
     }
@@ -68,8 +160,8 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
     });
 });
 
-// Upload multiple images
-app.post('/api/upload-multiple', upload.array('images', 10), (req, res) => {
+// Upload multiple images (protected route)
+app.post('/api/upload-multiple', authenticateToken, upload.array('images', 10), (req, res) => {
     if (!req.files || req.files.length === 0) {
         return res.status(400).json({ error: 'No files uploaded' });
     }
@@ -86,8 +178,8 @@ app.post('/api/upload-multiple', upload.array('images', 10), (req, res) => {
     });
 });
 
-// Get all uploaded images
-app.get('/api/images', (req, res) => {
+// Get all uploaded images (protected route)
+app.get('/api/images', authenticateToken, (req, res) => {
     fs.readdir('./uploads', (err, files) => {
         if (err) {
             return res.status(500).json({ error: 'Unable to read uploads directory' });
@@ -104,8 +196,8 @@ app.get('/api/images', (req, res) => {
     });
 });
 
-// Delete image
-app.delete('/api/images/:filename', (req, res) => {
+// Delete image (protected route)
+app.delete('/api/images/:filename', authenticateToken, (req, res) => {
     const filename = req.params.filename;
     const filepath = path.join(__dirname, 'uploads', filename);
     
