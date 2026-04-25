@@ -46,18 +46,8 @@ h1, h2, h3, h4 {
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     z-index: 1000;
     padding: 20px 0;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.18);
     transform: translateY(0);
-}
-
-.navbar.scrolled {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-    padding: 15px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
 .navbar.hidden {
@@ -89,13 +79,7 @@ h1, h2, h3, h4 {
     object-fit: cover;
     border-radius: 50%;
     border: 3px solid rgba(255, 255, 255, 0.5);
-    transition: var(--transition);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-.navbar.scrolled .logo-img {
-    border-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
 .nav-menu {
@@ -122,14 +106,8 @@ h1, h2, h3, h4 {
     font-weight: 600;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    transition: var(--transition);
     position: relative;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.navbar.scrolled .nav-menu a {
-    color: rgba(0, 0, 0, 0.85);
-    text-shadow: none;
 }
 
 .nav-menu a::after {
@@ -140,11 +118,7 @@ h1, h2, h3, h4 {
     width: 0;
     height: 2px;
     background: rgba(255, 255, 255, 0.9);
-    transition: var(--transition);
-}
-
-.navbar.scrolled .nav-menu a::after {
-    background: #8B6F47;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-menu a:hover::after {

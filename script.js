@@ -29,20 +29,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Navbar Background on Scroll with Hide/Show
+// Navbar Hide/Show on Scroll (keeping only hide/show, no background changes)
 let lastScrollTop = 0;
 const navbar = document.querySelector('.navbar');
 let scrollTimeout;
 
 window.addEventListener('scroll', () => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    // Add scrolled class when scrolling down
-    if (scrollTop > 100) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
     
     // Hide navbar when scrolling down, show when scrolling up
     if (scrollTop > lastScrollTop && scrollTop > 200) {
