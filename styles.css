@@ -846,11 +846,34 @@ section {
     padding-top: 30px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
 }
 
 .footer-bottom p {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-login-btn {
+    padding: 10px 24px;
+    background: #8B6F47;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.footer-login-btn:hover {
+    background: #6d5636;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(139, 111, 71, 0.3);
 }
 
 /* Admin Access Button */
