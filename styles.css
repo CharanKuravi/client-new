@@ -2,6 +2,15 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    cursor: default !important;
+}
+
+/* Force default cursor on everything — kills any custom cursor */
+body, body * {
+    cursor: default !important;
+}
+a, button, [role="button"], select, label {
+    cursor: pointer !important;
 }
 
 :root {
@@ -174,16 +183,29 @@ h1, h2, h3, h4 {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background: #0a0a0a;
 }
 
-/* Aurora canvas container — fills entire hero */
-.aurora-bg {
+.hero-bg-image {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&h=1080&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     z-index: 0;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 1;
 }
 
 .hero-content {

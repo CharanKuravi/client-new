@@ -105,38 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
         item.addEventListener('mouseleave', function () { this.style.zIndex = '1'; });
     });
 
-    // ─── Custom Cursor ────────────────────────────────────────────────────────
-    const cursorStyle = document.createElement('style');
-    cursorStyle.textContent = `
-        .custom-cursor {
-            width: 20px; height: 20px;
-            border: 2px solid #d4af37; border-radius: 50%;
-            position: fixed; pointer-events: none;
-            z-index: 9999; transition: transform 0.2s ease; display: none;
-        }
-        @media (min-width: 1024px) {
-            .custom-cursor { display: block; }
-            body { cursor: none; }
-            a, button, .portfolio-item, .service-card { cursor: none; }
-        }
-        .custom-cursor.hover { transform: scale(1.5); background: rgba(212,175,55,0.2); }
-    `;
-    document.head.appendChild(cursorStyle);
-
-    const cursor = document.createElement('div');
-    cursor.classList.add('custom-cursor');
-    document.body.appendChild(cursor);
-
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top  = e.clientY + 'px';
-    });
-
-    document.querySelectorAll('a, button, .portfolio-item, .service-card').forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-    });
-
     // ─── Contact Form ─────────────────────────────────────────────────────────
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
