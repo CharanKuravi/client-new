@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fashion Studio - Luxury Photography</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dome-gallery.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
@@ -21,8 +22,8 @@
                 <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=100&h=100&fit=crop" alt="Fashion Studio Logo" class="logo-img">
             </div>
             <ul class="nav-menu nav-right">
-                <li><a href="#services">PRICING</a></li>
-                <li><a href="#about">BLOG</a></li>
+                <li><a href="#services">SERVICES</a></li>
+                <li><a href="#portfolio">WORK</a></li>
                 <li><a href="#contact" class="nav-cta">CONTACT</a></li>
             </ul>
             <div class="hamburger">
@@ -130,14 +131,31 @@
                         <span>Wedding</span>
                     </div>
                 </div>
-                <div class="portfolio-item tall">
-                    <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&h=1200&fit=crop" alt="Fashion Photography" class="portfolio-img">
-                    <div class="portfolio-overlay">
-                        <h4>Urban Collection</h4>
-                        <span>Lifestyle</span>
-                    </div>
-                </div>
+
             </div>
+        </div>
+    </section>
+
+    <!-- Dome Gallery -->
+    <section class="dg-section">
+        <div class="container">
+            <div class="section-header centered">
+                <span class="section-label">Gallery</span>
+                <h2 class="section-title">Explore Our Work</h2>
+                <p class="section-description" style="color:rgba(255,255,255,0.6)">Drag to explore. Click any photo to view.</p>
+            </div>
+        </div>
+        <div class="dg-root">
+            <div class="dg-stage">
+                <div class="dg-sphere"></div>
+            </div>
+            <div class="dg-fade-top"></div>
+            <div class="dg-fade-bottom"></div>
+            <div class="dg-fade-left"></div>
+            <div class="dg-fade-right"></div>
+            <div class="dg-vignette"></div>
+            <div class="dg-scrim"></div>
+            <div class="dg-overlay"></div>
         </div>
     </section>
 
@@ -300,6 +318,8 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
+    <script src="dome-gallery.js" defer></script>
+    <script src="pixel-card.js" defer></script>
 </body>
 </html>

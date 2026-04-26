@@ -1,0 +1,188 @@
+.dg-section {
+  background: #0a0a0a;
+  padding: 80px 0 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.dg-section .section-header {
+  position: relative;
+  z-index: 10;
+  margin-bottom: 10px;
+}
+
+.dg-section .section-label { color: #d4af37; }
+.dg-section .section-title { color: #ffffff; }
+.dg-section .section-description { color: rgba(255,255,255,0.5); }
+
+/* Root container */
+.dg-root {
+  --dg-radius: 750px;
+  --segments: 34;
+  --circ: calc(var(--dg-radius) * 3.14159);
+  --unit-w: calc(var(--circ) / var(--segments));
+  --unit-h: calc(var(--circ) / var(--segments));
+
+  position: relative;
+  width: 100%;
+  height: 560px;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.dg-root:active { cursor: grabbing; }
+
+/* Stage: perspective container */
+.dg-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: calc(var(--dg-radius) * 2);
+  perspective-origin: 50% 50%;
+  overflow: hidden;
+}
+
+/* Sphere: the rotating 3D object */
+.dg-sphere {
+  position: relative;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: translateZ(calc(var(--dg-radius) * -1)) rotateX(0deg) rotateY(0deg);
+  will-change: transform;
+}
+
+/* Each tile */
+.dg-tile {
+  position: absolute;
+  width:  calc(var(--unit-w) * var(--tile-sx, 2));
+  height: calc(var(--unit-h) * var(--tile-sy, 2));
+  top: 0; left: 0;
+  margin: calc(var(--unit-h) * var(--tile-sy, 2) / -2) 0 0 calc(var(--unit-w) * var(--tile-sx, 2) / -2);
+  transform-style: preserve-3d;
+  transform:
+    rotateY(var(--tile-ry, 0deg))
+    rotateX(var(--tile-rx, 0deg))
+    translateZ(var(--dg-radius));
+  backface-visibility: hidden;
+}
+
+/* Inner image card */
+.dg-tile-inner {
+  position: absolute;
+  inset: 6px;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  backface-visibility: hidden;
+}
+
+.dg-tile-inner:hover {
+  transform: scale(1.06);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+}
+
+.dg-tile-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  display: block;
+}
+
+/* Edge fades */
+.dg-fade-top,
+.dg-fade-bottom,
+.dg-fade-left,
+.dg-fade-right {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.dg-fade-top {
+  top: 0; left: 0; right: 0;
+  height: 160px;
+  background: linear-gradient(to bottom, #0a0a0a 0%, transparent 100%);
+}
+
+.dg-fade-bottom {
+  bottom: 0; left: 0; right: 0;
+  height: 160px;
+  background: linear-gradient(to top, #0a0a0a 0%, transparent 100%);
+}
+
+.dg-fade-left {
+  top: 0; bottom: 0; left: 0;
+  width: 200px;
+  background: linear-gradient(to right, #0a0a0a 0%, transparent 100%);
+}
+
+.dg-fade-right {
+  top: 0; bottom: 0; right: 0;
+  width: 200px;
+  background: linear-gradient(to left, #0a0a0a 0%, transparent 100%);
+}
+
+/* Radial vignette overlay */
+.dg-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, #0a0a0a 100%);
+}
+
+/* Scrim (backdrop when image is open) */
+.dg-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.dg-scrim.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Enlarged image overlay */
+.dg-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: min(85vw, 400px);
+  height: min(85vh, 560px);
+  border-radius: 24px;
+  overflow: hidden;
+  z-index: 1001;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+}
+
+.dg-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.dg-overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
