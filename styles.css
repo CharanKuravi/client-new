@@ -174,10 +174,10 @@ h1, h2, h3, h4 {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background: #0a0a0a; /* dark base so aurora renders on black */
+    background: #0a0a0a;
 }
 
-/* Aurora WebGL canvas container */
+/* Aurora canvas container — fills entire hero */
 .aurora-bg {
     position: absolute;
     inset: 0;
@@ -185,8 +185,6 @@ h1, h2, h3, h4 {
     height: 100%;
     z-index: 0;
 }
-
-/* Removed: .hero-bg-image and .hero-overlay — photo is gone */
 
 .hero-content {
     position: relative;
