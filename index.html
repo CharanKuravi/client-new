@@ -248,16 +248,16 @@
                 </div>
                 <form class="contact-form">
                     <div class="form-group">
-                        <input type="text" placeholder="Your Name" required>
+                        <input type="text" name="name" placeholder="Your Name" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" placeholder="Email Address" required>
+                        <input type="email" name="email" placeholder="Email Address" required>
                     </div>
                     <div class="form-group">
-                        <input type="tel" placeholder="Phone Number">
+                        <input type="tel" name="phone" placeholder="Phone Number">
                     </div>
                     <div class="form-group">
-                        <select required>
+                        <select name="service" required>
                             <option value="">Select Service</option>
                             <option value="editorial">Editorial Photography</option>
                             <option value="commercial">Commercial Campaign</option>
@@ -266,7 +266,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <textarea placeholder="Tell us about your project" rows="5" required></textarea>
+                        <textarea name="message" placeholder="Tell us about your project" rows="5" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Send Inquiry</button>
                 </form>
@@ -314,6 +314,7 @@
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2026 Fashion Studio. All rights reserved.</p>
+                <a href="admin-static.html" class="footer-login-btn">LOGIN</a>
             </div>
         </div>
     </footer>
