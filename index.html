@@ -36,8 +36,14 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="hero-bg-image"></div>
-        <div class="hero-overlay"></div>
+        <!-- Aurora WebGL background — no photo -->
+        <div class="aurora-bg"
+             data-aurora
+             data-aurora-colors="#5227FF,#B497CF,#7cff67"
+             data-aurora-amplitude="1.2"
+             data-aurora-blend="0.6"
+             data-aurora-speed="0.4">
+        </div>
         <div class="hero-content">
             <div class="hero-text">
                 <span class="hero-subtitle">Real Adventures From Real Couples</span>
@@ -319,6 +325,7 @@
         </div>
     </footer>
 
+    <script src="aurora.js" defer></script>
     <script src="script.js" defer></script>
     <script src="dome-gallery.js" defer></script>
     <script src="pixel-card.js" defer></script>
