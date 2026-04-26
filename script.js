@@ -1,16 +1,16 @@
-// Mobile Navigation Toggle
+// Mobile Navigation Toggle — target both nav-left and nav-right menus
 const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-menu');
+const navMenus = document.querySelectorAll('.nav-menu');
 
 hamburger.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
+    navMenus.forEach(menu => menu.classList.toggle('active'));
     hamburger.classList.toggle('active');
 });
 
 // Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-menu a').forEach(link => {
     link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
+        navMenus.forEach(menu => menu.classList.remove('active'));
         hamburger.classList.remove('active');
     });
 });
@@ -36,6 +36,13 @@ let scrollTimeout;
 
 window.addEventListener('scroll', () => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    // Toggle .scrolled class so CSS rules for .navbar.scrolled apply
+    if (scrollTop > 50) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
     
     // Hide navbar when scrolling down, show when scrolling up
     if (scrollTop > lastScrollTop && scrollTop > 200) {
@@ -85,15 +92,29 @@ const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        
-        // Get form data
-        const formData = new FormData(contactForm);
-        
-        // Here you would typically send the data to a server
-        // For now, we'll just show a success message
+
+        // Read by name attribute — robust against field reordering
+        const name    = contactForm.querySelector('[name="name"]').value.trim();
+        const email   = contactForm.querySelector('[name="email"]').value.trim();
+        const phone   = contactForm.querySelector('[name="phone"]').value.trim();
+        const service = contactForm.querySelector('[name="service"]').value;
+        const message = contactForm.querySelector('[name="message"]').value.trim();
+
+        // Save to localStorage so admin panel can read it
+        const inquiries = JSON.parse(localStorage.getItem('contactInquiries') || '[]');
+        inquiries.push({
+            id: Date.now().toString(),
+            name,
+            email,
+            phone,
+            service,
+            message,
+            date: new Date().toLocaleDateString(),
+            status: 'new'
+        });
+        localStorage.setItem('contactInquiries', JSON.stringify(inquiries));
+
         alert('Thank you for your inquiry! We will get back to you within 24 hours.');
-        
-        // Reset form
         contactForm.reset();
     });
 }
@@ -104,7 +125,8 @@ window.addEventListener('scroll', () => {
     const hero = document.querySelector('.hero-content');
     if (hero) {
         hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-        hero.style.opacity = 1 - (scrolled / 700);
+        // Fade out over a longer range (1200px) so content stays visible longer
+        hero.style.opacity = Math.max(0, 1 - (scrolled / 1200));
     }
 });
 
@@ -176,13 +198,10 @@ document.querySelectorAll('a, button, .portfolio-item, .service-card').forEach(e
     });
 });
 
-// Loading Animation
+// Loading Animation — body starts hidden via CSS, fades in on load
 window.addEventListener('load', () => {
-    document.body.style.opacity = '0';
-    setTimeout(() => {
-        document.body.style.transition = 'opacity 0.5s ease';
-        document.body.style.opacity = '1';
-    }, 100);
+    document.body.style.transition = 'opacity 0.5s ease';
+    document.body.style.opacity = '1';
 });
 
 // Stats Counter Animation

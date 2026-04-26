@@ -15,6 +15,7 @@ body {
     color: var(--text-dark);
     line-height: 1.6;
     overflow-x: hidden;
+    opacity: 0; /* fades in via JS on load — prevents flash of unstyled content */
 }
 
 h1, h2, h3, h4 {
@@ -657,9 +658,9 @@ section {
     background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-left: 3px solid #8B6F47;
-    border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: 3px solid #8B6F47; /* accent — must come AFTER border shorthand */
+    border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
     transition: var(--transition);
 }

@@ -42,7 +42,7 @@
             </div>
             <nav class="sidebar-nav">
                 <a href="#" class="nav-item active" data-section="dashboard">
-                    <span class="icon">�</span>
+                    <span class="icon">📊</span>
                     Dashboard
                 </a>
                 <a href="#" class="nav-item" data-section="portfolio">
@@ -60,6 +60,10 @@
                 <a href="#" class="nav-item" data-section="inquiries">
                     <span class="icon">📧</span>
                     Inquiries
+                </a>
+                <a href="#" class="nav-item" data-section="settings">
+                    <span class="icon">⚙️</span>
+                    Settings
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -85,28 +89,28 @@
             <section id="dashboard-section" class="content-section">
                 <div class="dashboard-stats">
                     <div class="stat-card">
-                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📸</div>
+                        <div class="stat-icon">📸</div>
                         <div class="stat-content">
                             <h4>Total Photos</h4>
                             <p class="stat-number" id="total-photos">0</p>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">⭐</div>
+                        <div class="stat-icon">⭐</div>
                         <div class="stat-content">
                             <h4>Featured</h4>
                             <p class="stat-number" id="featured-count">0</p>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">📧</div>
+                        <div class="stat-icon">📧</div>
                         <div class="stat-content">
                             <h4>Inquiries</h4>
                             <p class="stat-number" id="inquiries-count">0</p>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">✓</div>
+                        <div class="stat-icon">✓</div>
                         <div class="stat-content">
                             <h4>Status</h4>
                             <p class="stat-number">Active</p>
@@ -146,7 +150,6 @@
                 </div>
 
                 <div class="upload-zone" id="upload-zone">
-                    <div class="upload-icon">📤</div>
                     <h3>Drag & Drop Images Here</h3>
                     <p>or click to browse (Multiple files supported)</p>
                     <input type="file" id="file-input" multiple accept="image/*" hidden>
@@ -188,6 +191,45 @@
                         <input type="text" id="hero-description" value="Based in Sedona, Arizona. Traveling anywhere in the U.S & Beyond">
                     </div>
                     <button class="btn-primary" id="save-hero-text">Save Changes</button>
+                </div>
+            </section>
+
+            <!-- Inquiries Section -->
+            <section id="inquiries-section" class="content-section" style="display: none;">
+                <div class="inquiries-header">
+                    <h3>Client Inquiries</h3>
+                    <p>Messages submitted through the contact form on your website</p>
+                </div>
+                <div class="inquiries-filters">
+                    <select id="inquiry-filter">
+                        <option value="all">All Inquiries</option>
+                        <option value="new">New</option>
+                        <option value="read">Read</option>
+                    </select>
+                    <button class="btn-danger" id="clear-inquiries-btn" style="margin-left: 12px; padding: 12px 20px; font-size: 13px;">Clear All</button>
+                </div>
+                <div class="inquiries-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Service</th>
+                                <th>Message</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inquiries-tbody">
+                            <!-- Inquiries will be loaded here -->
+                        </tbody>
+                    </table>
+                    <div id="no-inquiries-msg" style="text-align:center; padding: 60px 20px; color: #7f8c8d; display: none;">
+                        <p style="font-size: 18px; margin-bottom: 8px;">📭 No inquiries yet</p>
+                        <p style="font-size: 14px;">When visitors submit the contact form, their messages will appear here.</p>
+                    </div>
                 </div>
             </section>
 

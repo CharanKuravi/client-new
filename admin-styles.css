@@ -580,6 +580,8 @@ body {
     justify-content: center;
     font-size: 28px;
     flex-shrink: 0;
+    background: rgba(139, 111, 71, 0.1);
+    border: 2px solid #8B6F47;
 }
 
 .stat-content h4 {
@@ -752,4 +754,71 @@ body {
 
 .inquiries-table tbody tr:hover {
     background: rgba(139, 111, 71, 0.02);
+}
+
+/* Inquiry Status Badges */
+.inquiry-status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge-new {
+    background: rgba(52, 152, 219, 0.12);
+    color: #2980b9;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+.badge-read {
+    background: rgba(39, 174, 96, 0.1);
+    color: #27ae60;
+    border: 1px solid rgba(39, 174, 96, 0.25);
+}
+
+.btn-mark-read {
+    padding: 6px 12px;
+    background: rgba(52, 152, 219, 0.1);
+    color: #2980b9;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-mark-read:hover {
+    background: rgba(52, 152, 219, 0.2);
+}
+
+.btn-delete-inquiry {
+    padding: 6px 12px;
+    background: rgba(231, 76, 60, 0.08);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.25);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-delete-inquiry:hover {
+    background: rgba(231, 76, 60, 0.18);
+}
+
+/* New inquiry badge on sidebar nav */
+.nav-item .inquiry-badge {
+    margin-left: auto;
+    background: #e74c3c;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
 }
