@@ -1,0 +1,242 @@
+/* ===== SOCIAL SWIPE SECTION ===== */
+.social-swipe-section {
+  background: linear-gradient(to bottom, #24243e 0%, #302b63 100%);
+  padding: 80px 0 100px;
+}
+
+.social-swipe-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.social-swipe-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  color: #ffffff;
+  font-weight: 300;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.social-swipe-sub {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ===== GRID ===== */
+.social-swipe-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ===== CARD ===== */
+.social-swipe-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 28px 22px 22px;
+  overflow: hidden;
+  animation: cardFadeUp 0.6s ease-out backwards;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.social-swipe-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px);
+}
+
+@keyframes cardFadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* ===== CARD TOP ===== */
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+}
+
+.card-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.card-icon-wrap svg {
+  width: 24px;
+  height: 24px;
+  fill: #ffffff;
+}
+
+.card-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.card-platform {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.card-handle {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-visit-btn {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 5px 12px;
+  border-radius: 20px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.card-visit-btn:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ===== SWIPE TRACK ===== */
+.swipe-track {
+  position: relative;
+  height: 52px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
+  user-select: none;
+}
+
+.swipe-track-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: 26px;
+  opacity: 0.25;
+  transition: width 0.05s linear;
+  pointer-events: none;
+}
+
+.swipe-thumb {
+  position: relative;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  cursor: grab;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.swipe-thumb:active { cursor: grabbing; }
+
+.swipe-thumb svg { fill: #ffffff; pointer-events: none; }
+
+.swipe-thumb.swiped {
+  transform: translateX(calc(100% + 20px)) !important;
+}
+
+.swipe-label,
+.swipe-label-go {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.swipe-label {
+  color: rgba(255, 255, 255, 0.4);
+  padding-left: 52px;
+}
+
+.swipe-label-go {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  padding-left: 52px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 968px) {
+  .social-swipe-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .social-swipe-title { font-size: 36px; }
+}
+
+@media (max-width: 640px) {
+  .social-swipe-section { padding: 50px 0 60px; }
+  .social-swipe-title { font-size: 28px; }
+  .social-swipe-sub { font-size: 10px; }
+  .social-swipe-header { margin-bottom: 36px; }
+  .social-swipe-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 100%;
+  }
+  .social-swipe-card { padding: 20px 14px 16px; border-radius: 18px; }
+  .card-icon-wrap { width: 40px; height: 40px; border-radius: 12px; }
+  .card-icon-wrap svg { width: 20px; height: 20px; }
+  .card-platform { font-size: 12px; }
+  .card-handle { font-size: 9px; }
+  .card-visit-btn { display: none; }
+  .swipe-track { height: 44px; }
+  .swipe-thumb { width: 36px; height: 36px; }
+  .swipe-label, .swipe-label-go { font-size: 9px; letter-spacing: 1px; }
+  .card-top { margin-bottom: 18px; gap: 10px; }
+}
+
+@media (max-width: 380px) {
+  .social-swipe-grid { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }
+}
