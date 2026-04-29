@@ -4,6 +4,12 @@ import CircularGallery from './CircularGallery'
 export default function DomeGallery() {
   const { galleryItems } = useStudio()
 
+  // CircularGallery expects { image, text } — map from our { url, text } format
+  const mappedItems = galleryItems.map(item => ({
+    image: item.url,
+    text: item.text
+  }))
+
   return (
     <section className="dome-gallery-section">
       <div className="container">
@@ -17,7 +23,7 @@ export default function DomeGallery() {
       </div>
       <div style={{ height: '600px', position: 'relative' }}>
         <CircularGallery
-          items={galleryItems}
+          items={mappedItems}
           bend={3}
           textColor="#ffffff"
           borderRadius={0.05}

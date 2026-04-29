@@ -32,16 +32,16 @@ const DEFAULT_HERO_PHOTOS = [
 ]
 
 const DEFAULT_GALLERY_ITEMS = [
-  { id: 1,  url: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&h=600&fit=crop', text: 'Fashion Shoot' },
-  { id: 2,  url: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&h=600&fit=crop', text: 'Editorial' },
-  { id: 3,  url: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&h=600&fit=crop', text: 'Runway' },
-  { id: 4,  url: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=800&h=600&fit=crop', text: 'Portrait' },
-  { id: 5,  url: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop', text: 'Street Style' },
-  { id: 6,  url: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800&h=600&fit=crop', text: 'Couture' },
-  { id: 7,  url: 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800&h=600&fit=crop', text: 'Wedding' },
-  { id: 8,  url: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&h=600&fit=crop', text: 'Bridal' },
-  { id: 9,  url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=600&fit=crop', text: 'Ceremony' },
-  { id: 10, url: 'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&h=600&fit=crop', text: 'Studio' },
+  { id: 1,  url: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&h=600&fit=crop&auto=format', text: 'Fashion Shoot' },
+  { id: 2,  url: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&h=600&fit=crop&auto=format', text: 'Editorial' },
+  { id: 3,  url: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&h=600&fit=crop&auto=format', text: 'Runway' },
+  { id: 4,  url: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=800&h=600&fit=crop&auto=format', text: 'Portrait' },
+  { id: 5,  url: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop&auto=format', text: 'Street Style' },
+  { id: 6,  url: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800&h=600&fit=crop&auto=format', text: 'Couture' },
+  { id: 7,  url: 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800&h=600&fit=crop&auto=format', text: 'Wedding' },
+  { id: 8,  url: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&h=600&fit=crop&auto=format', text: 'Bridal' },
+  { id: 9,  url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=600&fit=crop&auto=format', text: 'Ceremony' },
+  { id: 10, url: 'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&h=600&fit=crop&auto=format', text: 'Studio' },
 ]
 
 function load(key, fallback) {
@@ -71,14 +71,14 @@ export function StudioProvider({ children }) {
   const [testimonials, setTestimonialsRaw] = useState(() => load('fs_testimonials', DEFAULT_TESTIMONIALS))
   const [inquiries,    setInquiriesRaw]    = useState(() => load('fs_inquiries',    []))
   const [heroPhotos,   setHeroPhotosRaw]   = useState(() => load('fs_hero_photos',  DEFAULT_HERO_PHOTOS))
-  const [galleryItems, setGalleryItemsRaw] = useState(() => load('fs_gallery',      DEFAULT_GALLERY_ITEMS))
+  const [galleryItems, setGalleryItemsRaw] = useState(() => load('fs_gallery_v2',     DEFAULT_GALLERY_ITEMS))
 
   const setPortfolio    = v => { setPortfolioRaw(v);    save('fs_portfolio',    v) }
   const setServices     = v => { setServicesRaw(v);     save('fs_services',     v) }
   const setTestimonials = v => { setTestimonialsRaw(v); save('fs_testimonials', v) }
   const setInquiries    = v => { setInquiriesRaw(v);    save('fs_inquiries',    v) }
   const setHeroPhotos   = v => { setHeroPhotosRaw(v);   save('fs_hero_photos',  v) }
-  const setGalleryItems = v => { setGalleryItemsRaw(v); save('fs_gallery',      v) }
+  const setGalleryItems = v => { setGalleryItemsRaw(v); save('fs_gallery_v2',      v) }
 
   const addInquiry = (data) => {
     const newInquiry = {
