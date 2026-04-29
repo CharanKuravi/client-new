@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom'
 import { useStudio, fileToBase64 } from '../context/StudioContext'
 import './AdminPage.css'
 
-const CREDENTIALS = { username: 'fsadmin', password: 'Studio@2026' }
+const CREDENTIALS = {
+  username: import.meta.env.VITE_ADMIN_USER,
+  password: import.meta.env.VITE_ADMIN_PASS,
+}
 
 export default function AdminPage() {
   const [loggedIn, setLoggedIn] = useState(false)
