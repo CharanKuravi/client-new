@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useStudio, fileToBase64 } from '../context/StudioContext'
+import { useStudio } from '../context/StudioContext'
+import { uploadToCloudinary, deleteFromCloudinary } from '../utils/cloudinary'
 import './AdminPage.css'
 
 const CREDENTIALS = {
@@ -195,20 +196,24 @@ function PortfolioPanel() {
   const { portfolio, setPortfolio } = useStudio()
   const [adding, setAdding] = useState(false)
   const [editing, setEditing] = useState(null)
-  const [form, setForm] = useState({ title: '', category: '', url: '', tall: false, wide: false })
+  const [form, setForm] = useState({ title: '', category: '', url: '', publicId: '', tall: false, wide: false })
   const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState('')
 
-  const openAdd = () => { setForm({ title: '', category: '', url: '', tall: false, wide: false }); setEditing(null); setAdding(true) }
-  const openEdit = (item) => { setForm({ title: item.title, category: item.category, url: item.url, tall: !!item.tall, wide: !!item.wide }); setEditing(item.id); setAdding(true) }
+  const openAdd = () => { setForm({ title: '', category: '', url: '', publicId: '', tall: false, wide: false }); setEditing(null); setAdding(true) }
+  const openEdit = (item) => { setForm({ title: item.title, category: item.category, url: item.url, publicId: item.publicId ?? '', tall: !!item.tall, wide: !!item.wide }); setEditing(item.id); setAdding(true) }
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0]
     if (!file) return
     setUploading(true)
+    setUploadError('')
     try {
-      const base64 = await fileToBase64(file)
-      setForm(prev => ({ ...prev, url: base64 }))
-    } catch { alert('Failed to read file') }
+      const { url, publicId } = await uploadToCloudinary(file)
+      setForm(prev => ({ ...prev, url, publicId }))
+    } catch (err) {
+      setUploadError(err.message ?? 'Upload failed')
+    }
     setUploading(false)
   }
 
@@ -220,6 +225,11 @@ function PortfolioPanel() {
       setPortfolio([...portfolio, { id: Date.now(), ...form }])
     }
     setAdding(false); setEditing(null)
+  }
+
+  const handleDelete = async (item) => {
+    setPortfolio(portfolio.filter(p => p.id !== item.id))
+    if (item.publicId) await deleteFromCloudinary(item.publicId)
   }
 
   return (
@@ -243,7 +253,7 @@ function PortfolioPanel() {
               placeholder="Paste image URL"
               value={form.url.startsWith('data:') ? '(uploaded file)' : form.url}
               onChange={e => setForm(p => ({ ...p, url: e.target.value }))}
-              style={{ flex: 1 }}
+              className="url-input"
             />
           </div>
           <div className="form-checks">
@@ -255,7 +265,8 @@ function PortfolioPanel() {
               <img src={form.url} alt="preview" onError={e => e.target.style.display='none'} />
             </div>
           )}
-          {uploading && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}>Processing image...</p>}
+          {uploading && <p className="upload-status">Uploading to Cloudinary...</p>}
+          {uploadError && <p className="upload-error">{uploadError}</p>}
           <div className="admin-form-actions">
             <button type="submit" className="admin-save-btn" disabled={uploading}>{editing ? 'Update' : 'Add'}</button>
             <button type="button" className="admin-cancel-btn" onClick={() => { setAdding(false); setEditing(null) }}>Cancel</button>
@@ -270,12 +281,12 @@ function PortfolioPanel() {
             <div className="admin-card-info">
               <h4>{item.title}</h4>
               <span className="admin-badge">{item.category}</span>
-              {item.tall && <span className="admin-badge" style={{marginLeft:4}}>Tall</span>}
-              {item.wide && <span className="admin-badge" style={{marginLeft:4}}>Wide</span>}
+              {item.tall && <span className="admin-badge admin-badge--spaced">Tall</span>}
+              {item.wide && <span className="admin-badge admin-badge--spaced">Wide</span>}
             </div>
             <div className="admin-card-actions">
               <button className="admin-edit-btn" onClick={() => openEdit(item)}>✏️</button>
-              <button className="admin-delete-btn" onClick={() => setPortfolio(portfolio.filter(p => p.id !== item.id))}>🗑</button>
+              <button className="admin-delete-btn" onClick={() => handleDelete(item)}>🗑</button>
             </div>
           </div>
         ))}
@@ -315,7 +326,7 @@ function ServicesPanel() {
         <form className="admin-add-form" onSubmit={handleSave}>
           <input placeholder="Icon label (e.g. 05)" value={form.icon} onChange={e => setForm(p => ({ ...p, icon: e.target.value }))} required />
           <input placeholder="Service Title" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required />
-          <textarea placeholder="Description" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} rows="3" required style={{ width:'100%', padding:'10px', background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:'8px', color:'#fff', fontFamily:'inherit', resize:'vertical' }} />
+          <textarea className="admin-textarea" placeholder="Description" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} rows="3" required />
           <div className="admin-form-actions">
             <button type="submit" className="admin-save-btn">{editing ? 'Update' : 'Add'}</button>
             <button type="button" className="admin-cancel-btn" onClick={() => { setAdding(false); setEditing(null) }}>Cancel</button>
@@ -373,7 +384,7 @@ function TestimonialsPanel() {
         <form className="admin-add-form" onSubmit={handleSave}>
           <input placeholder="Client Name" value={form.author} onChange={e => setForm(p => ({ ...p, author: e.target.value }))} required />
           <input placeholder="Role / Company" value={form.role} onChange={e => setForm(p => ({ ...p, role: e.target.value }))} required />
-          <textarea placeholder="Testimonial text" value={form.text} onChange={e => setForm(p => ({ ...p, text: e.target.value }))} rows="3" required style={{ width:'100%', padding:'10px', background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:'8px', color:'#fff', fontFamily:'inherit', resize:'vertical' }} />
+          <textarea className="admin-textarea" placeholder="Testimonial text" value={form.text} onChange={e => setForm(p => ({ ...p, text: e.target.value }))} rows="3" required />
           <div className="admin-form-actions">
             <button type="submit" className="admin-save-btn">{editing ? 'Update' : 'Add'}</button>
             <button type="button" className="admin-cancel-btn" onClick={() => { setAdding(false); setEditing(null) }}>Cancel</button>
@@ -404,23 +415,25 @@ function HeroPhotosPanel() {
   const { heroPhotos, setHeroPhotos } = useStudio()
   const [adding, setAdding] = useState(false)
   const [editing, setEditing] = useState(null)
-  const [form, setForm] = useState({ url: '', alt: '', rotate: '0deg' })
+  const [form, setForm] = useState({ url: '', publicId: '', alt: '', rotate: '0deg' })
   const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState('')
 
   const ROTATIONS = ['0deg', '3deg', '-4deg', '2deg', '-3deg', '4deg', '-2deg', '5deg', '-5deg']
 
-  const openAdd = () => { setForm({ url: '', alt: '', rotate: '3deg' }); setEditing(null); setAdding(true) }
-  const openEdit = (p) => { setForm({ url: p.url, alt: p.alt, rotate: p.rotate }); setEditing(p.id); setAdding(true) }
+  const openAdd = () => { setForm({ url: '', publicId: '', alt: '', rotate: '3deg' }); setEditing(null); setAdding(true) }
+  const openEdit = (p) => { setForm({ url: p.url, publicId: p.publicId ?? '', alt: p.alt, rotate: p.rotate }); setEditing(p.id); setAdding(true) }
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0]
     if (!file) return
     setUploading(true)
+    setUploadError('')
     try {
-      const base64 = await fileToBase64(file)
-      setForm(prev => ({ ...prev, url: base64 }))
+      const { url, publicId } = await uploadToCloudinary(file)
+      setForm(prev => ({ ...prev, url, publicId }))
     } catch (err) {
-      alert('Failed to read file')
+      setUploadError(err.message ?? 'Upload failed')
     }
     setUploading(false)
   }
@@ -433,6 +446,11 @@ function HeroPhotosPanel() {
       setHeroPhotos([...heroPhotos, { id: Date.now(), ...form }])
     }
     setAdding(false); setEditing(null)
+  }
+
+  const handleDelete = async (photo) => {
+    setHeroPhotos(heroPhotos.filter(p => p.id !== photo.id))
+    if (photo.publicId) await deleteFromCloudinary(photo.publicId)
   }
 
   return (
@@ -454,12 +472,11 @@ function HeroPhotosPanel() {
               placeholder="Paste image URL"
               value={form.url.startsWith('data:') ? '(uploaded file)' : form.url}
               onChange={e => setForm(p => ({ ...p, url: e.target.value }))}
-              style={{ flex: 1 }}
+              className="url-input"
             />
           </div>
           <input placeholder="Alt text (e.g. Fashion Photo)" value={form.alt} onChange={e => setForm(p => ({ ...p, alt: e.target.value }))} required />
-          <select value={form.rotate} onChange={e => setForm(p => ({ ...p, rotate: e.target.value }))}
-            style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', color: '#fff', fontFamily: 'inherit' }}>
+          <select className="admin-select" value={form.rotate} onChange={e => setForm(p => ({ ...p, rotate: e.target.value }))}>
             {ROTATIONS.map(r => <option key={r} value={r}>{r} rotation</option>)}
           </select>
           {form.url && (
@@ -467,7 +484,8 @@ function HeroPhotosPanel() {
               <img src={form.url} alt="preview" onError={e => e.target.style.display='none'} />
             </div>
           )}
-          {uploading && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}>Processing image...</p>}
+          {uploading && <p className="upload-status">Uploading to Cloudinary...</p>}
+          {uploadError && <p className="upload-error">{uploadError}</p>}
           <div className="admin-form-actions">
             <button type="submit" className="admin-save-btn" disabled={uploading}>{editing ? 'Update' : 'Add'}</button>
             <button type="button" className="admin-cancel-btn" onClick={() => { setAdding(false); setEditing(null) }}>Cancel</button>
@@ -487,7 +505,7 @@ function HeroPhotosPanel() {
             </div>
             <div className="admin-card-actions">
               <button className="admin-edit-btn" onClick={() => openEdit(photo)}>✏️</button>
-              <button className="admin-delete-btn" onClick={() => setHeroPhotos(heroPhotos.filter(p => p.id !== photo.id))}>🗑</button>
+              <button className="admin-delete-btn" onClick={() => handleDelete(photo)}>🗑</button>
             </div>
           </div>
         ))}
@@ -501,21 +519,23 @@ function GalleryPanel() {
   const { galleryItems, setGalleryItems } = useStudio()
   const [adding, setAdding] = useState(false)
   const [editing, setEditing] = useState(null)
-  const [form, setForm] = useState({ url: '', text: '' })
+  const [form, setForm] = useState({ url: '', publicId: '', text: '' })
   const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState('')
 
-  const openAdd = () => { setForm({ url: '', text: '' }); setEditing(null); setAdding(true) }
-  const openEdit = (g) => { setForm({ url: g.url, text: g.text }); setEditing(g.id); setAdding(true) }
+  const openAdd = () => { setForm({ url: '', publicId: '', text: '' }); setEditing(null); setAdding(true) }
+  const openEdit = (g) => { setForm({ url: g.url, publicId: g.publicId ?? '', text: g.text }); setEditing(g.id); setAdding(true) }
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0]
     if (!file) return
     setUploading(true)
+    setUploadError('')
     try {
-      const base64 = await fileToBase64(file)
-      setForm(prev => ({ ...prev, url: base64 }))
-    } catch {
-      alert('Failed to read file')
+      const { url, publicId } = await uploadToCloudinary(file)
+      setForm(prev => ({ ...prev, url, publicId }))
+    } catch (err) {
+      setUploadError(err.message ?? 'Upload failed')
     }
     setUploading(false)
   }
@@ -528,6 +548,11 @@ function GalleryPanel() {
       setGalleryItems([...galleryItems, { id: Date.now(), ...form }])
     }
     setAdding(false); setEditing(null)
+  }
+
+  const handleDelete = async (item) => {
+    setGalleryItems(galleryItems.filter(g => g.id !== item.id))
+    if (item.publicId) await deleteFromCloudinary(item.publicId)
   }
 
   return (
@@ -549,7 +574,7 @@ function GalleryPanel() {
               placeholder="Paste image URL"
               value={form.url.startsWith('data:') ? '(uploaded file)' : form.url}
               onChange={e => setForm(p => ({ ...p, url: e.target.value }))}
-              style={{ flex: 1 }}
+              className="url-input"
             />
           </div>
           <input placeholder="Label (e.g. Bridal Session)" value={form.text} onChange={e => setForm(p => ({ ...p, text: e.target.value }))} required />
@@ -558,7 +583,8 @@ function GalleryPanel() {
               <img src={form.url} alt="preview" onError={e => e.target.style.display='none'} />
             </div>
           )}
-          {uploading && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}>Processing image...</p>}
+          {uploading && <p className="upload-status">Uploading to Cloudinary...</p>}
+          {uploadError && <p className="upload-error">{uploadError}</p>}
           <div className="admin-form-actions">
             <button type="submit" className="admin-save-btn" disabled={uploading}>{editing ? 'Update' : 'Add'}</button>
             <button type="button" className="admin-cancel-btn" onClick={() => { setAdding(false); setEditing(null) }}>Cancel</button>
@@ -575,7 +601,7 @@ function GalleryPanel() {
             </div>
             <div className="admin-card-actions">
               <button className="admin-edit-btn" onClick={() => openEdit(item)}>✏️</button>
-              <button className="admin-delete-btn" onClick={() => setGalleryItems(galleryItems.filter(g => g.id !== item.id))}>🗑</button>
+              <button className="admin-delete-btn" onClick={() => handleDelete(item)}>🗑</button>
             </div>
           </div>
         ))}

@@ -55,16 +55,6 @@ function save(key, value) {
   localStorage.setItem(key, JSON.stringify(value))
 }
 
-// Convert uploaded file to base64 for localStorage storage
-export function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
-}
-
 export function StudioProvider({ children }) {
   const [portfolio,    setPortfolioRaw]    = useState(() => load('fs_portfolio',    DEFAULT_PORTFOLIO))
   const [services,     setServicesRaw]     = useState(() => load('fs_services',     DEFAULT_SERVICES))

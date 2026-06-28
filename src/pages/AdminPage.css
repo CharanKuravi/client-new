@@ -818,3 +818,53 @@
 .admin-add-form .upload-section input[type="file"] {
   display: none;
 }
+
+/* ─── Shared form helpers ─── */
+.admin-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  resize: vertical;
+}
+.admin-textarea:focus {
+  outline: none;
+  border-color: rgba(212,175,55,0.5);
+}
+.admin-textarea::placeholder { color: rgba(255,255,255,0.3); }
+
+.admin-select {
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.admin-select:focus { outline: none; border-color: rgba(212,175,55,0.5); }
+.admin-select option { background: #1a1a2e; }
+
+.url-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-badge--spaced { margin-left: 4px; }
+
+.upload-status {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+}
+
+.upload-error {
+  font-size: 13px;
+  color: #ff6b6b;
+  margin: 0;
+}
